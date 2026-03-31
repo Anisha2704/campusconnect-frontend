@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from "react";
 import Button from "../../../components/Button";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const [scrolled, setScrolled]   = useState(false);
@@ -33,8 +34,13 @@ export default function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-3">
-          <Button variant="outline">Log in</Button>
-          <Button variant="primary">Sign Up</Button>
+          <Link to="/login" className="btn-outline">
+            Log in
+          </Link>
+
+          <Link to="/register" className="btn-primary">
+            Sign Up
+          </Link>
         </div>
 
         {/* Hamburger */}
