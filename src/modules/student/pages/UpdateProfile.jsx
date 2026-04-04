@@ -1,191 +1,3 @@
-// import { useState } from "react";
-// import { updateProfile } from "../services/studentService";
-// import { useNavigate, useLocation } from "react-router-dom";
-
-// export default function UpdateProfile() {
-//   const navigate = useNavigate();
-//   const location = useLocation();
-
-//   const existingData = location.state || {};
-
-//   const [form, setForm] = useState({
-//     rollNumber: existingData.rollNumber || "",
-//     department: existingData.department || "",
-//     year: existingData.year || "",
-//     collegeId: existingData.collegeId || "",
-//     bio: existingData.bio || "",
-//     skills: existingData.skills || "",
-//     hobbies: existingData.hobbies || "",
-//     linkedinUrl: existingData.linkedinUrl || "",
-//     githubUrl: existingData.githubUrl || "",
-//     profilePhoto: null,
-//     idCard: null,
-//   });
-
-//   const [preview, setPreview] = useState(existingData.profilePhoto || null);
-
-//   const handleChange = (e) => {
-//     const { name, value, files, type } = e.target;
-
-//     if (type === "file") {
-//       const file = files[0];
-
-//       setForm((prev) => ({
-//         ...prev,
-//         [name]: file,
-//       }));
-
-//       if (name === "profilePhoto" && file) {
-//         setPreview(URL.createObjectURL(file));
-//       }
-//     } else {
-//       setForm((prev) => ({
-//         ...prev,
-//         [name]: value,
-//       }));
-//     }
-//   };
-
-//   const handleSubmit = async () => {
-//     try {
-//       const data = new FormData();
-
-//       // 🔥 required fields
-//       data.append("rollNumber", form.rollNumber);
-//       data.append("department", form.department);
-//       data.append("year", Number(form.year)); // FIX
-//       data.append("collegeId", Number(form.collegeId)); // FIX
-//       data.append("bio", form.bio);
-
-//       // optional
-//       if (form.skills) data.append("skills", form.skills);
-//       if (form.hobbies) data.append("hobbies", form.hobbies);
-//       if (form.linkedinUrl) data.append("linkedinUrl", form.linkedinUrl);
-//       if (form.githubUrl) data.append("githubUrl", form.githubUrl);
-
-//       // files
-//       if (form.profilePhoto instanceof File) {
-//         data.append("profilePhoto", form.profilePhoto);
-//       }
-
-//       if (form.idCard instanceof File) {
-//         data.append("idCard", form.idCard);
-//       }
-
-//       await updateProfile(data);
-
-//       navigate("/profile");
-
-//     } catch (err) {
-//       console.error("ERROR:", err.response?.data || err.message);
-//       alert(err.response?.data || "Something went wrong");
-//     }
-//   };
-
-//   return (
-//     <div className="bg-hero min-h-screen px-3 py-6 flex justify-center">
-//       <div className="w-full max-w-2xl">
-//         <div className="card-glass p-6 md:p-8">
-
-//           <h2 className="text-2xl font-extrabold text-grad-primary mb-6 text-center">
-//             {existingData?.rollNumber ? "Edit Profile" : "Create Profile"}
-//           </h2>
-
-//           {/* Profile Image */}
-//           <div className="flex flex-col items-center mb-5">
-//             <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md mb-3">
-//               {preview ? (
-//                 <img src={preview} className="w-full h-full object-cover" />
-//               ) : (
-//                 <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
-//                   No Image
-//                 </div>
-//               )}
-//             </div>
-
-//             <input
-//               type="file"
-//               name="profilePhoto"
-//               onChange={handleChange}
-//               className="text-xs"
-//             />
-//           </div>
-
-//           {/* Inputs */}
-//           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-//             <input
-//               className="input"
-//               name="rollNumber"
-//               placeholder="Roll Number"
-//               value={form.rollNumber}
-//               onChange={handleChange}
-//             />
-
-//             <input
-//               className="input"
-//               name="department"
-//               placeholder="Department"
-//               value={form.department}
-//               onChange={handleChange}
-//             />
-
-//             <input
-//               className="input"
-//               name="year"
-//               placeholder="Year"
-//               value={form.year}
-//               onChange={handleChange}
-//             />
-
-//             <input
-//               className="input"
-//               name="collegeId"
-//               placeholder="College ID"
-//               value={form.collegeId}
-//               onChange={handleChange}
-//             />
-
-//             <input
-//               className="input md:col-span-2"
-//               name="bio"
-//               placeholder="Write something about yourself..."
-//               value={form.bio}
-//               onChange={handleChange}
-//             />
-//           </div>
-
-//           {/* ID Card */}
-//           <div className="mt-4">
-//             <label className="text-xs text-gray-500">Upload ID Card</label>
-//             <input
-//               type="file"
-//               name="idCard"
-//               className="mt-1 text-xs"
-//               onChange={handleChange}
-//             />
-//           </div>
-
-//           {/* Buttons */}
-//           <div className="mt-6 flex justify-center gap-3">
-//             <button className="btn-primary px-6 py-2" onClick={handleSubmit}>
-//               Save Profile
-//             </button>
-
-//             <button
-//               className="btn-outline px-6 py-2"
-//               onClick={() => navigate("/student/profile")}
-//             >
-//               Cancel
-//             </button>
-//           </div>
-
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
 import { useEffect, useState } from "react";
 import { updateProfile, getProfile, getColleges } from "../services/studentService";
 import { useNavigate } from "react-router-dom";
@@ -342,143 +154,174 @@ export default function UpdateProfile() {
   }
 
   return (
-    <div className="bg-hero min-h-screen px-3 py-6 flex justify-center">
-      <div className="w-full max-w-2xl">
-        <div className="card-glass p-6 md:p-8">
+    <div className="bg-hero min-h-screen px-4 py-10 flex justify-center items-center">
+  <div className="w-full max-w-3xl">
+    <div className="bg-white/80 backdrop-blur-lg shadow-xl rounded-2xl p-6 md:p-10">
 
-          <h2 className="text-2xl font-extrabold text-grad-primary mb-6 text-center">
-            Edit Profile
-          </h2>
+      <h2 className="text-3xl font-extrabold text-center text-purple-700 mb-8">
+        Edit Profile
+      </h2>
 
-          {/* Profile Image */}
-          <div className="flex flex-col items-center mb-5">
-            <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md mb-3">
-              {preview ? (
-                <img src={preview} className="w-full h-full object-cover" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
-                  No Image
-                </div>
-              )}
+      {/* Profile Image */}
+      <div className="flex flex-col items-center mb-6">
+        <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-purple-200 shadow-md mb-3">
+          {preview ? (
+            <img src={preview} className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
+              No Image
             </div>
-
-            <input
-              type="file"
-              name="profilePhoto"
-              onChange={handleChange}
-              className="text-xs"
-            />
-          </div>
-
-          {/* Inputs */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-            <input
-              className="input"
-              name="rollNumber"
-              value={form.rollNumber || ""}
-              placeholder={existingData.rollNumber || "Roll Number"}
-              onChange={handleChange}
-            />
-
-            <input
-              className="input"
-              name="department"
-              value={form.department || ""}
-              placeholder={existingData.department || "Department"}
-              onChange={handleChange}
-            />
-
-            <input
-              className="input"
-              name="year"
-              value={form.year || ""}
-              placeholder={existingData.year || "Year"}
-              onChange={handleChange}
-            />
-
-            {/* College Dropdown */}
-            <select
-              name="collegeId"
-              className="input"
-              value={form.collegeId || ""}
-              onChange={handleChange}
-            >
-              <option value="">Select College</option>
-              {colleges.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-
-            <input
-              className="input md:col-span-2"
-              name="bio"
-              value={form.bio || ""}
-              placeholder={existingData.bio || "Write something about yourself"}
-              onChange={handleChange}
-            />
-
-            <input
-              className="input md:col-span-2"
-              name="skills"
-              value={form.skills || ""}
-              placeholder={
-                existingData.skills?.length
-                  ? existingData.skills.join(", ")
-                  : "Skills (comma separated)"
-              }
-              onChange={handleChange}
-            />
-
-            <input
-              className="input"
-              name="hobbies"
-              value={form.hobbies || ""}
-              placeholder={existingData.hobbies || "Hobbies"}
-              onChange={handleChange}
-            />
-
-            <input
-              className="input"
-              name="linkedinUrl"
-              value={form.linkedinUrl || ""}
-              placeholder={existingData.linkedinUrl || "LinkedIn URL"}
-              onChange={handleChange}
-            />
-
-            <input
-              className="input"
-              name="githubUrl"
-              value={form.githubUrl || ""}
-              placeholder={existingData.githubUrl || "GitHub URL"}
-              onChange={handleChange}
-            />
-          </div>
-
-          {/* ID Card */}
-          
-          {/* Buttons */}
-          <div className="mt-6 flex justify-center gap-3">
-            <button
-              className="btn-primary px-6 py-2"
-              onClick={handleSubmit}
-              disabled={loading}
-            >
-              {loading ? "Saving..." : "Save Profile"}
-            </button>
-
-            <button
-              className="btn-outline px-6 py-2"
-              onClick={() => navigate("/student/profile")}
-            >
-              Cancel
-            </button>
-          </div>
-
+          )}
         </div>
+
+        <input
+          type="file"
+          name="profilePhoto"
+          onChange={handleChange}
+          className="text-sm text-gray-600"
+        />
       </div>
+
+      {/* Inputs */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            Roll Number
+          </label>
+          <input
+            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-400 outline-none"
+            name="rollNumber"
+            value={form.rollNumber || ""}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            Department
+          </label>
+          <input
+            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-400 outline-none"
+            name="department"
+            value={form.department || ""}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            Year
+          </label>
+          <input
+            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-400 outline-none"
+            name="year"
+            value={form.year || ""}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            College
+          </label>
+          <select
+            name="collegeId"
+            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-400 outline-none bg-white"
+            value={form.collegeId || ""}
+            onChange={handleChange}
+          >
+            <option value="">Select College</option>
+            {colleges.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="md:col-span-2">
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            Bio
+          </label>
+          <input
+            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-400 outline-none"
+            name="bio"
+            value={form.bio || ""}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="md:col-span-2">
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            Skills
+          </label>
+          <input
+            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-400 outline-none"
+            name="skills"
+            value={form.skills || ""}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            Hobbies
+          </label>
+          <input
+            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-400 outline-none"
+            name="hobbies"
+            value={form.hobbies || ""}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            LinkedIn URL
+          </label>
+          <input
+            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-400 outline-none"
+            name="linkedinUrl"
+            value={form.linkedinUrl || ""}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="md:col-span-2">
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            GitHub URL
+          </label>
+          <input
+            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-400 outline-none"
+            name="githubUrl"
+            value={form.githubUrl || ""}
+            onChange={handleChange}
+          />
+        </div>
+
+      </div>
+
+      {/* Buttons */}
+      <div className="mt-8 flex justify-center gap-4">
+        <button
+          className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-semibold"
+          onClick={handleSubmit}
+          disabled={loading}
+        >
+          {loading ? "Saving..." : "Save Profile"}
+        </button>
+
+        <button
+          className="border border-gray-400 hover:bg-gray-100 px-6 py-2 rounded-lg font-semibold"
+          onClick={() => navigate("/student/profile")}
+        >
+          Cancel
+        </button>
+      </div>
+
     </div>
+  </div>
+</div>
   );
 }

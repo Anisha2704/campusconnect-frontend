@@ -53,7 +53,7 @@ const StudentRegisteredEventPage = () => {
                   className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow flex flex-col justify-between p-6 sm:p-8"
                 >
                   <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 truncate">
-                    {event.name || "Untitled Event"}
+                    {event.title || "Untitled Event"}
                   </h3>
 
                   <p className="text-gray-500 text-sm mb-4">

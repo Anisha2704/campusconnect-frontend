@@ -121,16 +121,157 @@ const CreateProfile = () => {
     }
   };
 
+  // return (
+  //   <div className="section bg-section-a min-h-screen flex items-center justify-center">
+  //     <div className="section-inner max-w-3xl w-full">
+
+  //       <div className="card p-6">
+  //         <h2 className="section-title text-center mb-6">
+  //           Complete Your Profile
+  //         </h2>
+
+  //         <form onSubmit={handleSubmit} className="space-y-4">
+
+  //           <input
+  //             name="rollNumber"
+  //             placeholder="Roll Number"
+  //             className="input"
+  //             value={formData.rollNumber}
+  //             onChange={handleChange}
+  //             required
+  //           />
+
+  //           <input
+  //             name="department"
+  //             placeholder="Department"
+  //             className="input"
+  //             value={formData.department}
+  //             onChange={handleChange}
+  //             required
+  //           />
+
+  //           <input
+  //             type="number"
+  //             name="year"
+  //             placeholder="Year (1-4)"
+  //             className="input"
+  //             value={formData.year}
+  //             onChange={handleChange}
+  //             required
+  //           />
+
+  //           {/* College Dropdown */}
+  //           <select
+  //             name="collegeId"
+  //             className="input"
+  //             value={formData.collegeId}
+  //             onChange={handleChange}
+  //             required
+  //           >
+  //             <option value="">Select College</option>
+  //             {colleges.map((c) => (
+  //               <option key={c.id} value={c.id}>
+  //                 {c.name}
+  //               </option>
+  //             ))}
+  //           </select>
+
+  //           <textarea
+  //             name="bio"
+  //             placeholder="Bio"
+  //             className="input"
+  //             value={formData.bio}
+  //             onChange={handleChange}
+  //           />
+
+  //           <input
+  //             name="skills"
+  //             placeholder="Skills (comma separated)"
+  //             className="input"
+  //             value={formData.skills}
+  //             onChange={handleChange}
+  //           />
+
+  //           <input
+  //             name="hobbies"
+  //             placeholder="Hobbies"
+  //             className="input"
+  //             value={formData.hobbies}
+  //             onChange={handleChange}
+  //           />
+
+  //           <input
+  //             name="linkedinUrl"
+  //             placeholder="LinkedIn URL"
+  //             className="input"
+  //             value={formData.linkedinUrl}
+  //             onChange={handleChange}
+  //           />
+
+  //           <input
+  //             name="githubUrl"
+  //             placeholder="GitHub URL"
+  //             className="input"
+  //             value={formData.githubUrl}
+  //             onChange={handleChange}
+  //           />
+
+  //           {/* Profile Photo */}
+  //           <div>
+  //             <label className="text-sm font-semibold">Profile Photo</label>
+  //             <input
+  //               type="file"
+  //               name="profilePhoto"
+  //               className="input"
+  //               onChange={handleChange}
+  //             />
+  //           </div>
+
+  //           {/* ID Card */}
+  //           <div>
+  //             <label className="text-sm font-semibold">ID Card</label>
+  //             <input
+  //               type="file"
+  //               name="idCard"
+  //               className="input"
+  //               onChange={handleChange}
+  //               required
+  //             />
+  //           </div>
+
+  //           <button
+  //             type="submit"
+  //             className="btn-primary w-full"
+  //             disabled={loading}
+  //           >
+  //             {loading ? "Creating..." : "Create Profile"}
+  //           </button>
+
+  //         </form>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
+
   return (
-    <div className="section bg-section-a min-h-screen flex items-center justify-center">
-      <div className="section-inner max-w-3xl w-full">
+  <div className="min-h-screen flex items-center justify-center bg-section-a px-4">
 
-        <div className="card p-6">
-          <h2 className="section-title text-center mb-6">
-            Complete Your Profile
-          </h2>
+    <div className="w-full max-w-4xl">
+      
+      {/* Glass Card */}
+      <div className="card-glass p-8">
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <h2 className="section-title text-center text-grad-primary mb-2">
+          Complete Your Profile
+        </h2>
+        <p className="section-desc text-center mb-6">
+          Build your professional identity 🚀
+        </p>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+
+          {/* Grid Layout */}
+          <div className="grid md:grid-cols-2 gap-4">
 
             <input
               name="rollNumber"
@@ -160,7 +301,6 @@ const CreateProfile = () => {
               required
             />
 
-            {/* College Dropdown */}
             <select
               name="collegeId"
               className="input"
@@ -176,17 +316,22 @@ const CreateProfile = () => {
               ))}
             </select>
 
-            <textarea
-              name="bio"
-              placeholder="Bio"
-              className="input"
-              value={formData.bio}
-              onChange={handleChange}
-            />
+          </div>
 
+          {/* Bio */}
+          <textarea
+            name="bio"
+            placeholder="Tell something about yourself..."
+            className="input h-24 resize-none"
+            value={formData.bio}
+            onChange={handleChange}
+          />
+
+          {/* Skills + Hobbies */}
+          <div className="grid md:grid-cols-2 gap-4">
             <input
               name="skills"
-              placeholder="Skills (comma separated)"
+              placeholder="Skills (React, Java, etc.)"
               className="input"
               value={formData.skills}
               onChange={handleChange}
@@ -199,7 +344,10 @@ const CreateProfile = () => {
               value={formData.hobbies}
               onChange={handleChange}
             />
+          </div>
 
+          {/* Social Links */}
+          <div className="grid md:grid-cols-2 gap-4">
             <input
               name="linkedinUrl"
               placeholder="LinkedIn URL"
@@ -215,43 +363,48 @@ const CreateProfile = () => {
               value={formData.githubUrl}
               onChange={handleChange}
             />
+          </div>
 
-            {/* Profile Photo */}
-            <div>
-              <label className="text-sm font-semibold">Profile Photo</label>
+          {/* File Upload Section */}
+          <div className="grid md:grid-cols-2 gap-4">
+
+            <div className="border border-dashed border-purple-300 rounded-xl p-4 text-center hover:bg-purple-50 transition">
+              <p className="text-sm font-semibold mb-2">Profile Photo</p>
               <input
                 type="file"
                 name="profilePhoto"
-                className="input"
                 onChange={handleChange}
+                className="text-sm"
               />
             </div>
 
-            {/* ID Card */}
-            <div>
-              <label className="text-sm font-semibold">ID Card</label>
+            <div className="border border-dashed border-pink-300 rounded-xl p-4 text-center hover:bg-pink-50 transition">
+              <p className="text-sm font-semibold mb-2">ID Card *</p>
               <input
                 type="file"
                 name="idCard"
-                className="input"
                 onChange={handleChange}
                 required
+                className="text-sm"
               />
             </div>
 
-            <button
-              type="submit"
-              className="btn-primary w-full"
-              disabled={loading}
-            >
-              {loading ? "Creating..." : "Create Profile"}
-            </button>
+          </div>
 
-          </form>
-        </div>
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="btn-primary w-full text-base py-3"
+            disabled={loading}
+          >
+            {loading ? "Creating Profile..." : "Create Profile"}
+          </button>
+
+        </form>
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default CreateProfile;
