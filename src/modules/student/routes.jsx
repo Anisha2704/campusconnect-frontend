@@ -30,8 +30,10 @@ const StudentRoutes = (
 
     {/* Registered Events */}
     <Route path="registeredevents" element={<StudentRegisteredEventPage />} />
+      {/* ✅ Other Pages */}
+      <Route path="profile" element={<StudentProfilePage />} />
 
-  </Route>
-);
+    </Route>
+  );
 
-export default StudentRoutes;
+  export default StudentRoutes;

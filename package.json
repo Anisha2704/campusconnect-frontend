@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@rolldown/binding-win32-x64-msvc": "^1.0.0-rc.10",
     "axios": "^1.13.6",
     "framer-motion": "^12.36.0",
     "lucide-react": "^1.7.0",
