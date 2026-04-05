@@ -13,7 +13,7 @@ const VendorLayout = () => {
       <div className="flex-1 flex flex-col">
 
         {/* 🔹 TOP NAVBAR */}
-        {/* <div className="bg-white shadow p-4 flex justify-between items-center">
+        <div className="bg-white shadow p-4 flex justify-between items-center">
           <h1 className="text-xl font-semibold">Vendor Dashboard</h1>
 
           <button
@@ -25,8 +25,7 @@ const VendorLayout = () => {
           >
             Logout
           </button>
-        </div> */}
-        <Navbar />
+        </div>
 
         {/* 🔹 PAGE CONTENT */}
         <div className="p-6">
