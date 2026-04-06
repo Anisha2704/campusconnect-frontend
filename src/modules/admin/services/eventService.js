@@ -100,3 +100,27 @@ export const assignVendor = async (eventId, serviceId, vendorId) => {
     return null;
   }
 };
+/**
+ * Upload event plan (PDF / file)
+ */
+export const uploadEventPlan = async (eventId, file) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await API.post(
+      `${BASE}/${eventId}/event-plan`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return res.data;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};

@@ -16,6 +16,7 @@ const StudentSidebar = ({ active, setActive }) => {
     { name: "Profile", icon: <FaUser />, path: "/student/profile" },
     { name: "Upcoming Events", icon: <FaCalendarAlt />, path: "/student/events" },
     { name: "My Events", icon: <FaClipboardList />, path: "/student/registeredevents" },
+    { name: "FeedBack", icon: <FaClipboardList />, path: "/student/feedback" },
   ];
 
   const handleClick = (item) => {

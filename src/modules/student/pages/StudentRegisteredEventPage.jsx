@@ -1,24 +1,37 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { getRegisteredEvents } from "../services/studentService"; // import your API service
 
 const StudentRegisteredEventPage = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    axios
-      .get("http://localhost:8080/student/events/registered", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => setEvents(Array.isArray(res.data) ? res.data : []))
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
+    const fetchRegisteredEvents = async () => {
+      try {
+        const res = await getRegisteredEvents();
+
+        // API may return res.data or res.data.data
+        const dataArray = Array.isArray(res.data)
+          ? res.data
+          : Array.isArray(res.data.data)
+          ? res.data.data
+          : [];
+
+        setEvents(dataArray);
+      } catch (err) {
+        console.error("Error fetching registered events:", err);
+        setEvents([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRegisteredEvents();
   }, []);
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-hero">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin"></div>
           <p className="text-gray-600 font-medium">Loading your events...</p>
@@ -28,13 +41,8 @@ const StudentRegisteredEventPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-hero py-12 px-4 sm:px-6 lg:px-12 relative overflow-hidden">
-      {/* Decorative blobs */}
-      <div className="blob w-96 h-96 bg-purple-200/40 -top-48 -right-48 animate-blob"></div>
-      <div className="blob w-80 h-80 bg-pink-200/30 top-1/3 -left-40 animate-blob-2"></div>
-      <div className="blob w-64 h-64 bg-blue-200/30 bottom-20 right-20 animate-blob-3"></div>
-
-      <div className="max-w-7xl mx-auto relative z-10">
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-12">
+      <div className="max-w-7xl mx-auto">
         <h2 className="text-center text-3xl sm:text-4xl font-extrabold text-purple-700 mb-12">
           My Registered Events
         </h2>
@@ -46,7 +54,7 @@ const StudentRegisteredEventPage = () => {
         ) : (
           <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {events.map((event) => {
-              const eventDate = new Date(event.date);
+              const eventDate = event.eventDate ? new Date(event.eventDate) : null;
               return (
                 <div
                   key={event.id}
@@ -58,8 +66,8 @@ const StudentRegisteredEventPage = () => {
 
                   <p className="text-gray-500 text-sm mb-4">
                     📅{" "}
-                    {event.date
-                      ? eventDate.toLocaleDateString("en-US", {
+                    {eventDate
+                      ? eventDate.toLocaleDateString("en-IN", {
                           weekday: "long",
                           year: "numeric",
                           month: "long",

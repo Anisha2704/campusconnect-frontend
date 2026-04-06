@@ -8,6 +8,7 @@ import AuthCheck from "./pages/AuthCheck";
 import Profile from "./pages/Profile";
 import CreateProfile from "./pages/CreateProfile";
 import UpdateProfile from "./pages/UpdateProfile";
+import FeedbackPage from "./pages/FeedbackPage";
 
 const StudentRoutes = (
   <Route path="/student" element={<StudentLayout />}>
@@ -19,6 +20,8 @@ const StudentRoutes = (
     <Route path="profile" element={<Profile />} />
     <Route path="create-profile" element={<CreateProfile />} />
     <Route path="update-profile" element={<UpdateProfile />} />
+    <Route path="feedback" element={<FeedbackPage />} />
+
 
     {/* Events */}
     <Route path="events">

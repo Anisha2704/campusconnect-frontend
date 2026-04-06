@@ -7,7 +7,8 @@ import {
   getServicesByEventId,
   getServiceVendors,
   assignVendor,
-  updateEventStatus
+  updateEventStatus,
+  uploadEventPlan 
 } from "../services/eventService";
 
 import { getRegistrationsByEvent, getRegistrationsCount } from "../services/registrationService";
@@ -24,6 +25,32 @@ const EventDetails = () => {
   const [registrations, setRegistrations] = useState([]);
   const [regCount, setRegCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [eventPlanFile, setEventPlanFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+
+  const handleFileChange = (e) => {
+  setEventPlanFile(e.target.files[0]);
+};
+
+const handleUploadEventPlan = async () => {
+  if (!eventPlanFile) {
+    alert("Please select a file");
+    return;
+  }
+
+  try {
+    setUploading(true);
+    await uploadEventPlan(id, eventPlanFile);
+    alert("Event plan uploaded ✅");
+    fetchEventData();
+    setEventPlanFile(null);
+  } catch (err) {
+    console.error(err);
+    alert("Upload failed ❌");
+  } finally {
+    setUploading(false);
+  }
+};
 
   // ✅ Fetch event, services, and registrations
   const fetchEventData = async () => {
@@ -91,6 +118,37 @@ const EventDetails = () => {
         <p><b>Date:</b> {new Date(event.eventDate).toLocaleDateString()}</p>
         <p><b>Max Participants:</b> {event.maxParticipants}</p>
         <p><b>Status:</b> <StatusBadge status={event.status} /></p>
+      </div>
+
+      <div className="border p-4 rounded bg-gray-50">
+        <h2 className="text-lg font-semibold mb-2">Event Plan</h2>
+
+        {/* Show existing file */}
+        {event.eventPlanUrl && (
+          <a
+            href={event.eventPlanUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="text-blue-600 underline block mb-2"
+          >
+            View Current Plan
+          </a>
+        )}
+        <div className="flex items-center justify-between gap-3">
+          <input
+            type="file"
+            onChange={handleFileChange}
+            className="mb-2"
+          />
+
+          <button
+            onClick={handleUploadEventPlan}
+            disabled={uploading}
+            className="px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            {uploading ? "Uploading..." : "Upload Plan"}
+          </button>
+        </div>
       </div>
 
       {/* Services Section */}
