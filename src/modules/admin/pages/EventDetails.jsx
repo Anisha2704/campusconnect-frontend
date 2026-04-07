@@ -57,6 +57,7 @@ const handleUploadEventPlan = async () => {
     setLoading(true);
     try {
       const eventData = await getEventById(id);
+      console.log(eventData);
       setEvent(eventData);
 
       const servicesData = await getServicesByEventId(id);
@@ -134,7 +135,9 @@ const handleUploadEventPlan = async () => {
             View Current Plan
           </a>
         )}
-        <div className="flex items-center justify-between gap-3">
+        {event.status != "COMPLETED" ? 
+        (
+          <div className="flex items-center justify-between gap-3">
           <input
             type="file"
             onChange={handleFileChange}
@@ -149,6 +152,8 @@ const handleUploadEventPlan = async () => {
             {uploading ? "Uploading..." : "Upload Plan"}
           </button>
         </div>
+        ) : ("")}
+        
       </div>
 
       {/* Services Section */}
@@ -173,12 +178,16 @@ const handleUploadEventPlan = async () => {
                   <td className="p-2 border">{s.serviceName}</td>
                   <td className="p-2 border">{s.vendor || "Not assigned"}</td>
                   <td className="p-2 border text-center">
-                    <button
-                      onClick={() => handleAssignClick(s)}
-                      className="px-3 py-1 bg-blue-500 text-white rounded"
-                    >
-                      {s.vendor ? "Change Vendor" : "Assign Vendor"}
-                    </button>
+                    {event.status != "COMPLETED" ? 
+                    (
+                      <button
+                        onClick={() => handleAssignClick(s)}
+                        className="px-3 py-1 bg-blue-500 text-white rounded"
+                      >
+                        {s.vendor ? "Change Vendor" : "Assign Vendor"}
+                      </button>
+                    ) : ("")}
+                    
                   </td>
                 </tr>
               ))}

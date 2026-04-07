@@ -1,20 +1,28 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getVendorById, updateVendorStatus } from "../services/vendorService";
+import { getVendorById, updateVendorStatus, getVendorServices } from "../services/vendorService";
 import { useNavigate } from "react-router-dom";
 
 const VendorDetails = () => {
   const { id } = useParams();
   const [vendor, setVendor] = useState(null);
+  const [services, setServices] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchVendor();
+    fetchServices();
   }, []);
 
   const fetchVendor = async () => {
     const data = await getVendorById(id);
     setVendor(data);
+    console.log(data);
+  };
+
+  const fetchServices = async () => {
+    const data = await getVendorServices(id);
+    setServices(data);
   };
 
   const handleAction = async (status) => {
@@ -68,14 +76,41 @@ const VendorDetails = () => {
 
       {/* Document */}
       <div>
-        <h2 className="text-lg font-semibold">Business License</h2>
+        <h2 className="text-lg font-semibold">Documents</h2>
         <a
           href={vendor.businessLicenseUrl}
           target="_blank"
           className="text-blue-500"
         >
-          View License
+          View Business License
         </a>
+        <br />
+        <a
+          href={vendor.brochureUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="text-blue-500"
+        >
+          View Brochure
+        </a>
+      </div>
+
+      {/* Vendor Services */}
+      <div>
+        <h2 className="text-lg font-semibold">Services Allocated</h2>
+
+        {services.length === 0 ? (
+          <p className="text-gray-500">No services available</p>
+        ) : (
+          <div className="gap-4 mt-2">
+            {services.map((service) => (
+              <div key={service.id} className="border p-3 rounded grid grid-cols-2">
+                <p><b>Event Name:</b> {service.eventTitle}</p>
+                <p><b>Service:</b> {service.serviceName}</p>
+          </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Actions */}

@@ -61,6 +61,7 @@ const Events = () => {
     <option value="REJECTED">REJECTED</option>
     <option value="RESCHEDULED">RESCHEDULED</option>
     <option value="BOOKED">BOOKED</option>
+    <option value="COMPLETED">COMPLETED</option>
   </select>
 </div>
 
@@ -96,19 +97,19 @@ const Events = () => {
                 events.map((e) => (
                   <tr key={e.id} className="border-t">
 
-                    <td className="p-3 font-medium">
+                    <td className="p-2 font-medium">
                       {e.title}
                     </td>
 
-                    <td className="p-3">
+                    <td className="p-2">
                       {e.category}
                     </td>
 
-                    <td className="p-3">
+                    <td className="p-2">
                       {e.collegeName}
                     </td>
 
-                    <td className="p-3">
+                    <td className="p-2">
                       {new Date(e.eventDate).toLocaleDateString()}
                     </td>
 
@@ -116,39 +117,32 @@ const Events = () => {
                       {e.maxParticipants}
                     </td> */}
 
-                    <td className="p-3">
+                    <td className="p-2">
                       <StatusBadge status={e.status} />
                     </td>
 
-                    <td className="p-3 text-center space-x-2">
+                    <td className="p-2 text-center space-x-2">
 
-                      <button
-                      onClick={() => navigate(`/admin/events/${e.id}`)}
-                      className="px-3 py-1 text-sm bg-blue-500 text-white rounded"
-                    >
-                      View
-                    </button>
-
-                      <button
-                        onClick={() =>
-                          handleStatusUpdate(e.id, "PLANNED")
-                        }
-                        className="px-3 py-1 text-sm bg-green-500 text-white rounded"
-                      >
-                        Plan
-                      </button>
-
-                      <button
-                        onClick={() =>
-                          handleStatusUpdate(e.id, "REJECTED")
-                        }
-                        className="px-3 py-1 text-sm bg-red-500 text-white rounded"
-                      >
-                        Reject
-                      </button>
-
-                    </td>
-
+                        <button
+                          onClick={() => navigate(`/admin/events/${e.id}`)}
+                          className="px-3 py-1 text-sm bg-blue-500 text-white rounded"
+                        >
+                          View
+                        </button>
+                    { e.status != "COMPLETED" ? 
+                      (
+                        <button
+                          onClick={() =>
+                            handleStatusUpdate(e.id, "REJECTED")
+                          }
+                          className="px-3 py-1 text-sm bg-red-500 text-white rounded"
+                        >
+                          Reject
+                        </button>
+                    ) : ("")
+                    }   
+                    </td> 
+                    
                   </tr>
                 ))
               )}

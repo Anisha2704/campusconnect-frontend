@@ -23,3 +23,9 @@ export const updateVendorStatus = async (id, status) => {
   });
   return res.data;
 };
+
+// ✅ NEW: Get vendor services
+export const getVendorServices = async (vendorId) => {
+  const res = await API.get(`${BASE}/${vendorId}/services`);
+  return res.data;
+};
