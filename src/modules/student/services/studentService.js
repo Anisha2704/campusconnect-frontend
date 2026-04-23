@@ -28,5 +28,5 @@ export const submitFeedback = (data) =>
   API.post("/student/feedback", data);
 
 // Get feedback for a specific event (optional)
-export const getEventFeedback = (eventId) =>
-  API.get(`/student/feedback/${eventId}`);
+export const getMyFeedback = () =>
+  API.get("/student/feedback");

@@ -6,11 +6,9 @@ const FeedbackPage = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submittingId, setSubmittingId] = useState(null);
-
   const [formData, setFormData] = useState({});
   const [openFormId, setOpenFormId] = useState(null);
 
-  // ✅ Get eventId from URL
   const { eventId } = useParams();
 
   useEffect(() => {
@@ -21,7 +19,6 @@ const FeedbackPage = () => {
     try {
       const res = await API.get("/student/feedback");
       setEvents(res.data);
-      console.log(res.data);
     } catch (err) {
       console.error(err);
     } finally {
@@ -32,7 +29,7 @@ const FeedbackPage = () => {
   const handleSubmit = async (eventId) => {
     const data = formData[eventId];
 
-    if (!data || data.rating === 0) {
+    if (!data || !data.rating) {
       alert("Please select rating");
       return;
     }
@@ -40,9 +37,12 @@ const FeedbackPage = () => {
     setSubmittingId(eventId);
 
     try {
-      await API.post(`/student/feedback/${eventId}`, data);
+      await API.post("/student/feedback", {
+        eventId,
+        rating: data.rating,
+        message: data.message,
+      });
 
-      // ✅ Update UI instantly
       setEvents((prev) =>
         prev.map((e) =>
           e.eventId === eventId
@@ -50,7 +50,7 @@ const FeedbackPage = () => {
                 ...e,
                 rating: data.rating,
                 message: data.message,
-                submitted: true,
+                isSubmitted: true,
               }
             : e
         )
@@ -64,7 +64,7 @@ const FeedbackPage = () => {
       setOpenFormId(null);
     } catch (err) {
       console.error(err);
-      alert("Failed to submit feedback");
+      alert(err.response?.data || "Failed to submit feedback");
     } finally {
       setSubmittingId(null);
     }
@@ -74,7 +74,6 @@ const FeedbackPage = () => {
     return <p className="text-center mt-10">Loading feedback...</p>;
   }
 
-  // ✅ FILTER EVENT IF COMING FROM BUTTON
   const filteredEvents = eventId
     ? events.filter((e) => String(e.eventId) === String(eventId))
     : events;
@@ -89,7 +88,9 @@ const FeedbackPage = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredEvents.map((event) => {
             const isSubmitted =
-              event.submitted || (event.rating && event.rating > 0);
+              event.isSubmitted ||
+              event.submitted ||
+              (event.rating && event.rating > 0);
 
             const currentForm = formData[event.eventId] || {
               rating: 0,
@@ -104,7 +105,6 @@ const FeedbackPage = () => {
                 <h2 className="font-bold text-lg">{event.eventTitle}</h2>
 
                 {isSubmitted ? (
-                  // ✅ Submitted UI
                   <div className="mt-4">
                     <p className="text-yellow-500 text-lg">
                       {"⭐".repeat(event.rating || 0)}
@@ -112,7 +112,6 @@ const FeedbackPage = () => {
                     <p className="text-gray-600 mt-2">
                       {event.message || "No message"}
                     </p>
-
                     <div className="mt-3 text-green-600 text-sm font-medium">
                       ✅ Feedback Submitted
                     </div>
@@ -120,7 +119,6 @@ const FeedbackPage = () => {
                 ) : (
                   <div className="mt-4">
                     {openFormId !== event.eventId ? (
-                      // ✅ BUTTON
                       <button
                         onClick={() => setOpenFormId(event.eventId)}
                         className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
@@ -128,9 +126,7 @@ const FeedbackPage = () => {
                         Give Feedback
                       </button>
                     ) : (
-                      // ✅ FORM
                       <div className="space-y-3">
-                        {/* ⭐ Rating */}
                         <div className="flex gap-2">
                           {[1, 2, 3, 4, 5].map((star) => (
                             <span
@@ -155,7 +151,6 @@ const FeedbackPage = () => {
                           ))}
                         </div>
 
-                        {/* 📝 Message */}
                         <textarea
                           placeholder="Write your feedback..."
                           className="w-full border rounded-lg p-2 text-sm"
@@ -171,18 +166,16 @@ const FeedbackPage = () => {
                           }
                         />
 
-                        {/* 🚀 Submit */}
                         <button
                           onClick={() => handleSubmit(event.eventId)}
                           disabled={submittingId === event.eventId}
-                          className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition"
+                          className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition disabled:opacity-50"
                         >
                           {submittingId === event.eventId
                             ? "Submitting..."
                             : "Submit Feedback"}
                         </button>
 
-                        {/* ❌ Cancel */}
                         <button
                           onClick={() => setOpenFormId(null)}
                           className="w-full text-sm text-gray-500"
@@ -203,6 +196,7 @@ const FeedbackPage = () => {
 };
 
 export default FeedbackPage;
+
 
 // import React, { useEffect, useState } from "react";
 // import API from "../../../api/axios";

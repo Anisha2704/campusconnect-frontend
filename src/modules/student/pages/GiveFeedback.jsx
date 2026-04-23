@@ -23,60 +23,77 @@ const GiveFeedback = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // ✅ Validate all fields present
     if (!form.rating || !form.message) {
-      alert("All fields required");
+      alert("All fields are required");
+      return;
+    }
+
+    // ✅ Validate rating range
+    const rating = Number(form.rating);
+    if (rating < 1 || rating > 5) {
+      alert("Rating must be between 1 and 5");
       return;
     }
 
     try {
       setLoading(true);
-
-      // ✅ USE YOUR SERVICE HERE
       await submitFeedback({
         eventId: Number(eventId),
-        rating: Number(form.rating),
+        rating: rating,
         message: form.message,
       });
-
-      alert("✅ Feedback submitted!");
-
+      alert("✅ Feedback submitted successfully!");
       navigate("/my-feedback");
-
     } catch (err) {
-      alert(err.response?.data || "Error");
+      // ✅ Better error message extraction
+      const msg =
+        err.response?.data?.message ||
+        err.response?.data ||
+        "Something went wrong. Please try again.";
+      alert(msg);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="p-6 max-w-md mx-auto shadow rounded">
-      <h2 className="text-xl font-bold mb-4">Give Feedback</h2>
+    <div className="max-w-md mx-auto mt-10 p-6 border rounded shadow">
+      <h2 className="text-xl font-semibold mb-4">Give Feedback</h2>
 
       <form onSubmit={handleSubmit}>
+        <label className="block text-sm font-medium mb-1">
+          Rating (1–5)
+        </label>
         <input
           type="number"
           name="rating"
-          placeholder="Rating (1-5)"
+          placeholder="Enter rating between 1 and 5"
+          min="1"
+          max="5"
           value={form.rating}
           onChange={handleChange}
-          className="border p-2 w-full mb-3"
+          className="border p-2 w-full mb-3 rounded"
         />
 
+        <label className="block text-sm font-medium mb-1">
+          Your Feedback
+        </label>
         <textarea
           name="message"
-          placeholder="Write feedback..."
+          placeholder="Write your feedback here..."
           value={form.message}
           onChange={handleChange}
-          className="border p-2 w-full mb-3"
+          rows={4}
+          className="border p-2 w-full mb-4 rounded"
         />
 
         <button
           type="submit"
           disabled={loading}
-          className="bg-blue-500 text-white px-4 py-2 w-full rounded"
+          className="bg-blue-500 text-white px-4 py-2 w-full rounded hover:bg-blue-600 disabled:opacity-50"
         >
-          {loading ? "Submitting..." : "Submit"}
+          {loading ? "Submitting..." : "Submit Feedback"}
         </button>
       </form>
     </div>
