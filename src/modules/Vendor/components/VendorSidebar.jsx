@@ -1,89 +1,109 @@
-import React from "react";
 import { NavLink } from "react-router-dom";
+import * as FaIcons from "react-icons/fa";
+import { X } from "lucide-react";
 
-const VendorSidebar = () => {
+const VendorSidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
+  const menuItems = [
+    {
+      name: "Dashboard",
+      icon: <FaIcons.FaTachometerAlt />,
+      path: "/vendor",
+    },
+    {
+      name: "Edit Profile",
+      icon: <FaIcons.FaUserEdit />,
+      path: "/vendor/edit-profile",
+    },
+    {
+      name: "History",
+      icon: <FaIcons.FaHistory />,
+      path: "/vendor/history",
+    },
+  ];
+
   return (
     <>
-      {/* ✅ CSS inside same file */}
-      <style>{`
-        .sidebar {
-          width: 260px;
-          height: 100vh;
-          background: #111827;
-          color: white;
-          padding: 20px;
-          display: flex;
-          flex-direction: column;
-        }
+      {/* ✅ Mobile Overlay */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 md:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
 
-        .logo {
-          font-size: 22px;
-          font-weight: bold;
-          text-align: center;
-          margin-bottom: 30px;
-        }
+      {/* ✅ Sidebar */}
+      <div
+        className={`
+          sidebar fixed top-0 left-0 h-full z-50
+          transition-transform duration-300 ease-in-out
 
-        .nav {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-        }
+          /* ✅ FIXED MOBILE BEHAVIOR */
+          ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
+          md:translate-x-0
 
-        .link {
-          padding: 12px;
-          border-radius: 8px;
-          text-decoration: none;
-          color: white;
-          transition: 0.2s;
-        }
+          /* desktop width */
+          ${isOpen ? "md:w-64" : "md:w-16"}
+          w-64
+        `}
+      >
+        {/* 🔝 Header */}
+        <div className="flex items-center justify-between mb-8 mt-2 px-2">
+          
+          {isOpen && (
+            <h2 className="text-white text-lg font-bold whitespace-nowrap">
+              Vendor Panel
+            </h2>
+          )}
 
-        .link:hover {
-          background: #374151;
-        }
+          <div className="flex items-center gap-2">
 
-        .active {
-          background: #4f46e5;
-        }
-      `}</style>
+            {/* ❌ Close mobile */}
+            <button
+              className="md:hidden text-white"
+              onClick={() => setMobileOpen(false)}
+            >
+              <X size={20} />
+            </button>
 
-      <div className="sidebar">
+            {/* 🔄 Toggle desktop */}
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="sidebar-toggle text-white hidden md:block"
+            >
+              <FaIcons.FaBars />
+            </button>
 
-        {/* Logo */}
-        <h2 className="logo">Vendor Panel</h2>
+          </div>
+        </div>
 
-        {/* Navigation */}
-        <nav className="nav">
+        {/* 📋 Menu */}
+        <ul className="space-y-2 px-2">
+          {menuItems.map((item, index) => (
+            <li key={index}>
+              <NavLink
+                to={item.path}
+                end={item.path === "/vendor"}
+                onClick={() => setMobileOpen(false)}
+                className={({ isActive }) =>
+                  `sidebar-item ${
+                    isActive ? "sidebar-item-active" : ""
+                  }`
+                }
+              >
+                <span className="text-lg text-white">
+                  {item.icon}
+                </span>
 
-          <NavLink
-            to="/vendor"
-            end
-            className={({ isActive }) =>
-              `link ${isActive ? "active" : ""}`
-            }
-          >
-            📊 Dashboard
-          </NavLink>
-
-          <NavLink
-            to="/vendor/edit-profile"
-            className={({ isActive }) =>
-              `link ${isActive ? "active" : ""}`
-            }
-          >
-            ✏️ Edit Profile
-          </NavLink>
-
-          <NavLink
-            to="/vendor/history"
-            className={({ isActive }) =>
-              `link ${isActive ? "active" : ""}`
-            }
-          >
-            📜 History
-          </NavLink>
-
-        </nav>
-
+                {/* show text only when expanded */}
+                {isOpen && (
+                  <span className="text-white font-medium">
+                    {item.name}
+                  </span>
+                )}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
       </div>
     </>
   );

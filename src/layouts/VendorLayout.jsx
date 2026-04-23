@@ -1,37 +1,43 @@
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import VendorSidebar from "../modules/Vendor/components/VendorSidebar";
 import Navbar from "../modules/public/components/Navbar";
 
 const VendorLayout = () => {
+  const [isOpen, setIsOpen] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100 overflow-hidden">
 
-      {/* ✅ SIDEBAR */}
-      <VendorSidebar />
+      {/* ✅ Sidebar */}
+      <VendorSidebar
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        mobileOpen={mobileOpen}
+        setMobileOpen={setMobileOpen}
+      />
 
-      {/* ✅ MAIN CONTENT */}
-      <div className="flex-1 flex flex-col">
+      {/* Right Side (Navbar + Content) */}
+      <div className="flex flex-col flex-1">
 
-        {/* 🔹 TOP NAVBAR */}
-        <div className="bg-white shadow p-4 flex justify-between items-center">
-          <h1 className="text-xl font-semibold">Vendor Dashboard</h1>
+        {/* ✅ Fixed Navbar (above everything except mobile sidebar) */}
+        <header className="fixed top-0 left-0 right-0 h-[64px] bg-white z-[90] border-b shadow-sm">
+          <Navbar toggleSidebar={() => setMobileOpen(true)} />
+        </header>
 
-          <button
-            onClick={() => {
-              localStorage.clear();
-              window.location.href = "/login";
-            }}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
-          >
-            Logout
-          </button>
-        </div>
+        {/* Spacer for fixed navbar */}
+        <div className="h-[64px]" />
 
-        {/* 🔹 PAGE CONTENT */}
-        <div className="p-6">
-          <Outlet />
-        </div>
-
+        {/* Main Content */}
+        <main
+          className={`flex-1 overflow-y-auto transition-all duration-300 p-4 md:p-6
+          ${isOpen ? "md:ml-64" : "md:ml-16"}`}
+        >
+          <div className="max-w-7xl mx-auto">
+            <Outlet />
+          </div>
+        </main>
       </div>
     </div>
   );

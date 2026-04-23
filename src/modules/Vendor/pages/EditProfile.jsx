@@ -3,15 +3,16 @@ import API from "../../../api/axios";
 import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     businessName: "",
     category: "",
     phone: "",
     gstNumber: "",
-    businessLicenseUrl: "",
   });
 
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -20,6 +21,8 @@ const EditProfile = () => {
         setForm(res.data);
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -33,9 +36,8 @@ const EditProfile = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
+    setLoading(true);
     try {
       await API.put("/vendor/profile", form);
       alert("Profile Updated Successfully ✅");
@@ -43,147 +45,101 @@ const EditProfile = () => {
     } catch (err) {
       console.error(err);
       alert("Update Failed ❌");
+    } finally {
+      setLoading(false);
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-hero">
+        <p className="text-gray-500 animate-pulse">Loading profile...</p>
+      </div>
+    );
+  }
+
   return (
-    <>
-      {/* ✅ CSS inside same file */}
-      <style>{`
-        .container {
-          min-height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: #f3f4f6;
-          padding: 20px;
-        }
+    <div className="bg-hero min-h-screen px-4 py-10 flex justify-center items-center">
+      <div className="w-full max-w-2xl">
+        <div className="bg-white/80 backdrop-blur-lg shadow-xl rounded-2xl p-6 md:p-10">
 
-        .card {
-          background: white;
-          padding: 30px;
-          border-radius: 16px;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-          width: 100%;
-          max-width: 500px;
-        }
+          <h2 className="text-3xl font-extrabold text-center text-purple-700 mb-8">
+            Edit Vendor Profile
+          </h2>
 
-        .title {
-          text-align: center;
-          font-size: 22px;
-          font-weight: bold;
-          margin-bottom: 20px;
-        }
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-        .form-group {
-          margin-bottom: 15px;
-        }
-
-        .label {
-          display: block;
-          font-size: 14px;
-          font-weight: 600;
-          margin-bottom: 5px;
-          color: #333;
-        }
-
-        .input {
-          width: 100%;
-          padding: 10px;
-          border-radius: 8px;
-          border: 1px solid #ccc;
-        }
-
-        .input:focus {
-          outline: none;
-          border-color: #4f46e5;
-        }
-
-        .btn {
-          width: 100%;
-          background: #4f46e5;
-          color: white;
-          padding: 12px;
-          border: none;
-          border-radius: 10px;
-          cursor: pointer;
-          font-weight: bold;
-        }
-
-        .btn:hover {
-          background: #4338ca;
-        }
-      `}</style>
-
-      <div className="container">
-        <div className="card">
-          <h2 className="title">Edit Profile</h2>
-
-          <form onSubmit={handleSubmit}>
-
-            <div className="form-group">
-              <label className="label">Business Name</label>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Business Name
+              </label>
               <input
-                type="text"
                 name="businessName"
-                value={form.businessName}
+                value={form.businessName || ""}
                 onChange={handleChange}
-                className="input"
+                className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-400 outline-none"
               />
             </div>
 
-            <div className="form-group">
-              <label className="label">Category</label>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Category
+              </label>
               <input
-                type="text"
                 name="category"
-                value={form.category}
+                value={form.category || ""}
                 onChange={handleChange}
-                className="input"
+                className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-400 outline-none"
               />
             </div>
 
-            <div className="form-group">
-              <label className="label">Phone Number</label>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Phone
+              </label>
               <input
-                type="text"
                 name="phone"
-                value={form.phone}
+                value={form.phone || ""}
                 onChange={handleChange}
-                className="input"
+                className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-400 outline-none"
               />
             </div>
 
-            <div className="form-group">
-              <label className="label">GST Number</label>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                GST Number
+              </label>
               <input
-                type="text"
                 name="gstNumber"
-                value={form.gstNumber}
+                value={form.gstNumber || ""}
                 onChange={handleChange}
-                className="input"
+                className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-400 outline-none"
               />
             </div>
 
-            {/* <div className="form-group">
-              <label className="label">Business License URL</label>
-              <input
-                type="text"
-                name="businessLicenseUrl"
-                value={form.businessLicenseUrl}
-                onChange={handleChange}
-                className="input"
-              />
-            </div> */}
+          </div>
 
-            <button type="submit" className="btn">
-              Update Profile
+          {/* Buttons */}
+          <div className="mt-8 flex justify-center gap-4">
+            <button
+              className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-semibold"
+              onClick={handleSubmit}
+              disabled={loading}
+            >
+              {loading ? "Saving..." : "Save Profile"}
             </button>
 
-          </form>
+            <button
+              className="border border-gray-400 hover:bg-gray-100 px-6 py-2 rounded-lg font-semibold"
+              onClick={() => navigate("/vendor")}
+            >
+              Cancel
+            </button>
+          </div>
+
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
